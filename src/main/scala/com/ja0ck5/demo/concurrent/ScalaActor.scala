@@ -1,6 +1,7 @@
 package com.ja0ck5.demo.concurrent
 
 import akka.actor.Actor
+import akka.event.Logging
 
 //import scala.actors.Actor
 
@@ -11,13 +12,12 @@ object ScalaActor {
 
 }
 
-object FirstActor extends Actor{
-/*  def act(): Unit ={
-    for(i <- 1 to 10){
-      println("Step:" + i)
-      Thread.sleep(2000)
-    }
-  }*/
+object FirstActor extends Actor {
 
-  override def receive: Receive = ???
+  val log = Logging(context.system, this)
+
+  override def receive = {
+    case "test" ⇒ log.info("received test")
+    case _ ⇒ log.info("received unknown message")
+  }
 }
