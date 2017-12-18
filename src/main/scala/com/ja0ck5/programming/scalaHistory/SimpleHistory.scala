@@ -35,7 +35,33 @@ object SimpleOperations {
     val nilEndOneTwoThree = 1 :: 2 :: 3 :: Nil
     println(nilEndOneTwoThree)
 
-    //
+    //元组，容器对象，和List 一样，元组也是不可变的。但和 list 不同，元组可以包含不同类型的元素
+    val pair = (99, "Luft ballons", 'a', "ha")
+    // 为什么不能用访问 List 的方法来访问元组，如 pair(0). 因为 List 的 apply 方法始终返回同样的类型
+    println(pair._1, pair._2)
 
+    // set
+    var jetSet = Set("Boeing", "Airbus")
+    // 可变和不可变 都提供了 + 方法，可变 set 是把元素加入自身，而不可变 set 将产生一个全新的 set
+    jetSet += "Lear"
+    println(jetSet)
+
+    // 可变 set
+    import scala.collection.mutable.Set
+    val movieSet = Set("Hitch", "Poltergeist")
+    movieSet += "Shrek"
+    println(movieSet)
+
+    // map
+    import scala.collection.mutable.Map
+
+    val treasureMap = Map[Int,String]()
+    treasureMap += (1 -> "Go to ice island.")
+    treasureMap += (2 -> "Find big X on ground.")
+    treasureMap += (3 -> "Dig.")
+    println(treasureMap(2))
+
+    val res = Array("zero","one","two").mkString("\n")
+    assert(res == "zero\none\ntwo")
   }
 }
