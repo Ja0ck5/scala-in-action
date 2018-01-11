@@ -1,5 +1,7 @@
 package com.ja0ck5.programming.oop
 
+import scala.collection.mutable.Map
+
 /**
   * Created by Jack on 2017/12/18.
   */
@@ -89,5 +91,75 @@ class ChecksumAccumulator {
     "This String gets lost too"
   }
 
+
+}
+
+/**
+  * Scala 比 Java 更为面向对象的特点之一是 Scala 不能定义静态成员,而是定义单例对象。除了用 object 关键字替换了 class 关键字以为
+  * 单例对象的定义看上去与类定义一直
+  *
+  * 当单例对象与某个类共享同一个名称时，该单例对象被称为这个类的 伴生对象(companion object).
+  * 类和它的伴生对象必须定义在一个源文件里面
+  * 类被称为该单例对象的伴生类(companion class)。
+  * 类与其伴生对象可以互相访问其私有成员
+  *
+  * 单例对象类似于 Java 中的 静态方法工具类
+  * 但是该单例对象不只是静态方法的工具类。它同样是头等对象。
+  *
+  * 这里的例子，只有遇到了 缓存能解决的性能问题时，才用得到
+  * 而且应该使用 弱映射
+  * 如 scala.Collection.jcl 的 WeakHashMap 如果内存稀缺的话，缓存里的条目就会被垃圾回收机制回收掉
+  *
+  * 此外 new 只能用于实例化类，因此创造的新对象是 类ChecksumAccumulator 而不是同名的单例对象
+  *
+  *
+  * 定义单例对象并没有定义类型
+  * 如果只有 ChecksumAccumulator 对象的定义，就不能建立 ChecksumAccumulator 类型的变量。
+  * 或者认为 ChecksumAccumulator 类型是由单例对象的伴生类定义的。
+  * 然而 单例对象扩展了父类，并可以混入特质(Trait) 因此，可以使用类型调用单例对象的方法 或者 用类型的实例变量指代单例对象
+  * 并把它传递给需要类型参数的方法
+  *
+  *
+  * 类和单例对象 的区别
+  * 1. 单例对象不带参数，而类可以。这里是因为单例对象不是用 new 关键字实例化的，所以没机会传递实例化参数
+  * 2. 每个 单例对象 都被实现为 虚构类(synthetic class) 的实例，并指向静态的变量，因此 单例对象与 Java 静态类有着相同的初始化语义
+  * 3. 单例对象 在第一次被访问的时候才会被初始化
+  * 4. 不与伴生类共享名称的单例对象被称作 独立对象(standalone object)。可以用于工具类，或者定义 Scala 应用的入口
+  *
+  * 虚构类的名字是对象名加上一个 $ 如 单例对象ChecksumAccumulator 的虚构类为 ChecksumAccumulator$
+  *
+  */
+object ChecksumAccumulator {
+
+  private val cache = Map[String, Int]()
+
+  def calculate(s: String): Int =
+    if (cache.contains(s))
+      cache(s)
+    else {
+      val acc = new ChecksumAccumulator
+      for (c <- s)
+        acc.add(c.toByte)
+      val cs = acc.checkSum()
+      cache += (s -> cs) // 建立传入字符串到整数校验和的键值对映射 然后加入 cache Map 中
+      cs
+    }
+
+  /**
+    * Scala 的每个源文件都隐含了对包 java.lang/ 包 scala, 以及单例对象 Predef 的成员引用
+    * 包 scala 中的 Predef 对象包含了许多有用的方法 如 println assert
+    *
+    *
+    *
+    * @param args
+    */
+  def main(args: Array[String]): Unit = {
+    val str = "test"
+    val strMap = Map[String, Int]()
+    val i = 10;
+    println(strMap += (str -> i))
+
+    ChecksumAccumulator.calculate("Every value is an object")
+  }
 
 }
