@@ -18,15 +18,16 @@ import ChecksumAccumulator.calculate
   *
   * Created by Jack on 2018/1/11.
   */
-object FallWinterSpringSummer extends App{
+object FallWinterSpringSummer extends App {
 
-  for (season <- List("fall","winter","spring","summer")){
-    println(season+":"+ calculate(season))
+  for (season <- List("fall", "winter", "spring", "summer")) {
+    println(season + ":" + calculate(season))
+    println(
+      """| Welcome to Ultamix 3000."
+         |Type "Help" for help. """.stripMargin)
+
+    // 符号字面量。 实际为 Symbol("favor") 如果同一个符号字面量出现两次，那么两个字面量指向的是同一个 Symbol 对象
+    val s = 'favor
   }
-
-
-
-
-
 
 }
