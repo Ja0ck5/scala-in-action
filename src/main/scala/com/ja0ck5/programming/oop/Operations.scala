@@ -30,6 +30,7 @@ object Operations {
     // 无副作用
     val lowerCaseStr = s.toLowerCase
 
+    println(List(1,2,3) == List(1,2,3))// true
 
   }
 
