@@ -84,10 +84,11 @@ class Rational(n: Int, d: Int) {
   // Scala 中可以创建再需要的时候自动把整数转换为有理数的隐式转换。
   // 定义了 从 Int 到 Rational 的转换方法。 implicit 修饰符告诉编译器再一些情况下自动调用
   // 隐式转换需要在定义范围内才起作用。
-  implicit def int2Rational(x:Int) = new Rational(x)
-  val r = new Rational(2,3)
-  val implicitR = 2 * r
+  // 实际上如果定义了隐式转换，Rational 类甚至可以不用定义两套方法。仅定义对 Rational 的操作即可，隐式转换会自动把操作数转换为 Rational 类的实例
+  implicit def int2Rational(x: Int) = new Rational(x)
 
+  val r = new Rational(2, 3)
+  val implicitR = 2 * r
 
 
 }
