@@ -126,6 +126,20 @@ object InnerControl {
       file.close
     }
 
+    // 通常避免用 finally 子句返回值
+    def f(): Int = try {
+      return 1
+    } finally {
+      return 2
+    }
+
+    // 2
+    def g(): Int = try {
+      1
+    } finally {
+      2
+    } // 1
+
 
   }
 
