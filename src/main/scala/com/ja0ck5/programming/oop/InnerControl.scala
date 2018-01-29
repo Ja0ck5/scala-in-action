@@ -131,15 +131,52 @@ object InnerControl {
       return 1
     } finally {
       return 2
-    }
+    } // 2
 
-    // 2
     def g(): Int = try {
       1
     } finally {
       2
     } // 1
 
+    // 匹配表达式  match
+    // Scala 中的 match 类似于其他语言的 switch ，它可以提供多个备选项(alternative)中做选择。
+    // 基本上 match 表达式可以让你使用任意的模式(pattern)做选择。
+    // 与 Java 的 switch 语句比，任何类型的常量都可以做比较样本(case)
+    // 另一个区别是 case 的最后没有 break 取而代之的是 break 是隐含的。
+    // match 也能产生值
+    val firstArg = if (args.length > 0) args(0) else ""
+
+    val friend =
+      firstArg match {
+        case "salt" => println("pepper")
+        case "chips" => println("salsa")
+        case "eggs" => println("bacon")
+        case _ => println("huh?")
+      }
+    println(friend)
+
+    // 不再使用 break 和 continue
+    // scala 去掉这些命令是因为它们与函数式字面量融合的不太好。充分利用函数字面量代替
+    var i = 0
+    var foundIt = false
+    while (i < args.length && !foundIt) {
+      if (!args(i).startsWith("-")) {
+        if (args(i).endsWith("-"))
+          foundIt = true
+      }
+    }
+
+    // 不用 var 做循环的递归替代方法
+    // Scala 编译器不会对一下代码生成递归函数。因为所有的递归调用都在尾调用(tail-call) 位置，编译器会产生出与 while 循环类似的代码
+    // 每个递归调用将被实现为回到函数开始位置的跳转
+    def searchFrom(i: Int): Int =
+    if (i >= args.length) -1
+    else if (args(i).startsWith("-")) searchFrom(i + 1)
+    else if (args(i).endsWith(".scala")) i
+    else searchFrom(i + 1)
+
+    var searchFromI = searchFrom(0)
 
   }
 
