@@ -113,18 +113,18 @@ object InnerControl {
     // @throws 注解声明 throws 子句，但不是必须
     // try-catch-finally 也产生值。
     // 如果异常被抛出但没被捕获，表达式就没有返回值。由 finally 子句计算得到的值，即使有也会被抛弃，它不应该修改主函数体 或 catch 子句中计算的值
-    val file = new FileReader("input.txt")
-    try {
-      val f = new FileReader("input.txt")
-    } catch {
-      case ex: FileNotFoundException =>
-        println("FNF")
-      case ex: IOException =>
-        println("IOE")
-    } finally {
-      // 此处惯例与 Java 一样，Scala 还可以使用另一种称为 出借模式(loan pattern) 的技巧更简洁地表达到同样的目的
-      file.close
-    }
+//    val file = new FileReader("input.txt")
+//    try {
+//      val f = new FileReader("input.txt")
+//    } catch {
+//      case ex: FileNotFoundException =>
+//        println("FNF")
+//      case ex: IOException =>
+//        println("IOE")
+//    } finally {
+//      // 此处惯例与 Java 一样，Scala 还可以使用另一种称为 出借模式(loan pattern) 的技巧更简洁地表达到同样的目的
+//      file.close
+//    }
 
     // 通常避免用 finally 子句返回值
     def f(): Int = try {
@@ -177,6 +177,62 @@ object InnerControl {
     else searchFrom(i + 1)
 
     var searchFromI = searchFrom(0)
+
+    // Java 不允许在内部范围内创建与外部范围变量同名的变量。在 Scala 中，内部变量被认为遮蔽(shadow)了同名的外部变量，因为在内部范围中外部变量变得不可见
+    val a = 1; // 在花括号之前需要加分号
+    {
+      val a = 2
+      println(a)
+    }
+    println(a)
+
+
+    // 指令式风格 打印乘法表
+    def printMultiTable(): Unit = {
+      var i = 1
+      while (i <= 10) {
+        var j = 1
+        while (j <= 10) {
+          val prod = (i * j).toString
+          var k = prod.length
+          while (k < 4) {
+            print("  ")
+            k += 1
+          }
+          print(prod)
+          j += 1
+        }
+        println()
+        i += 1
+      }
+    }
+
+    // 函数式风格 重构指令式风格，将 标准输出上打印的乘法表 重构成 作为字符串返回
+    // 以序列的形式返回一行乘法表
+    def makeRowSeq(row: Int) =
+    for (col <- 1 to 10) yield {
+      val prod = (row * col).toString
+      val padding = " " * (4 - prod.length)
+      padding + prod
+    }
+
+    // 以字符串形式返回一行乘法表
+    def makeRow(row: Int) = makeRowSeq(row).mkString
+
+    // 以字符串形式返回乘法表，每行记录占一行字符串
+    // printMultiTable 函数的另一个暗示其指令式风格的信号在于 它的 while 循环和 var. 与之相对
+    // multiTable 函数使用了 val 类型变量、for 表达式以及帮助函数(helper function).并调用了 mkString 方法
+    // 提炼两个帮助函数 makeRow 和 makeRowSeq ，使代码容易阅读。函数 makeRowSeq 使用了 可以从 1 to 10 枚举列数的 for 表达式
+    // 其函数体计算行和列的城际，决定乘积前占位的空格，并生成由占位空格。乘积合并成的字符串。 for 表达式返回以这些生成字符串作为元素的序列。
+    // 而另一个函数 makeRow 只是对 makeRowSeq 返回的结果调用 mkString 函数，把序列中的字符串合并成一个字符串返回
+    def multiTable() = {
+      val tableSeq = // 行记录字符串的序列
+        for (row <- 1 to 10)
+          yield makeRow(row)
+
+      tableSeq.mkString("\n")
+    }
+
 
   }
 
