@@ -187,11 +187,15 @@ object LongLines {
 //    boom(3)
 
     // 修改成尾递归
-    def bang(x: Int): Int =
-      if (x == 0) throw new Exception("bang!")
-      else bang(x - 1)
+//    def bang(x: Int): Int =
+//      if (x == 0) throw new Exception("bang!")
+//      else bang(x - 1)
+// 尾递归函数将不会为每个调用制造新的堆栈结构；所有的调用将在一个结构内执行
+//    bang(5)
 
-    bang(5)
+    // 尾调用优化限定了方法或嵌套函数必须在最后一个操作调用本身，而不是转到某个函数值或什么其他的中间函数。
+
+
 
   }
 
