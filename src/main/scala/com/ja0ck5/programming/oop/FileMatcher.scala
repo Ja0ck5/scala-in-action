@@ -1,6 +1,7 @@
 package com.ja0ck5.programming.oop
 
-import java.io.File
+import java.io.{File, PrintWriter}
+import java.util.Date
 
 /**
   * Created by Jack on 2018/2/27.
@@ -73,7 +74,7 @@ object FileMatcher {
   // 柯里化后的同一个函数，代之以一个列表的两个Int 参数
   def curriedSum(x: Int)(y: Int) = x + y
 
-//  curriedSum(1)
+  //  curriedSum(1)
   // 实际上接连调用了两个传统函数。
   // 1. 第一个函数调用带单个名为 x 的 Int 参数，并返回第二个函数的函数值。
   // 2. 第二个函数带 Int 参数 y
@@ -88,10 +89,47 @@ object FileMatcher {
   println(second(2))
 
   // 可以用部分应用函数表达式方式
-  val twoPlus = curriedSum(2)_
+  val twoPlus = curriedSum(2) _
   println(twoPlus(2))
 
   //
+
+  def twice(op: Double => Double, x: Double) = op(op(x))
+
+  println(twice(_ + 1, 5))
+
+  def withPrintWriter(file: File, op: PrintWriter => Unit) {
+    val writer = new PrintWriter(file)
+    try {
+      op(writer)
+    } finally {
+      writer.close()
+    }
+  }
+  // 这里的好处是由 withPrintWriter 来确认文件在末尾被关闭，而非用户代码，因此可以确保关闭文件。这个技巧被称为 借贷模式(loan pattern)
+  // 因为 控制抽象函数，如withPrintWriter 打开了资源并 "贷出" 给函数。 PrintWriter 借给函数 op. 当函数完成的时候，它发出信号说明不再需要 "借" 的资源
+  // 于是 资源被关闭在 finally 中,以确定被关闭
+  withPrintWriter(new File("data.txt"), writer => writer.println(new Date()))
+
+  // 让客户代码看上去更像内建控制结构的一种方式是 使用花括号代替小括号包围参数列表。Scala 的任何方法调用，如果只传入一个参数，就能可选地使用花括号代替小括号包围参数
+  // 其目的是让客户程序员能写出包围在花括号内的函数字面量
+  val g = "hello world"
+  println(g.substring(7,9))
+
+  def withPrintWriter2(file: File)(op: PrintWriter => Unit) {
+    val writer = new PrintWriter(file)
+    try {
+      op(writer)
+    } finally {
+      writer.close()
+    }
+  }
+  val testFile = new File("data.txt")
+  withPrintWriter2(testFile){
+    writer => writer.println(new Date())
+  }
+
+  // 传名参数
 
 
 }
