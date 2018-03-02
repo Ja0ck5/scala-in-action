@@ -106,6 +106,7 @@ object FileMatcher {
       writer.close()
     }
   }
+
   // 这里的好处是由 withPrintWriter 来确认文件在末尾被关闭，而非用户代码，因此可以确保关闭文件。这个技巧被称为 借贷模式(loan pattern)
   // 因为 控制抽象函数，如withPrintWriter 打开了资源并 "贷出" 给函数。 PrintWriter 借给函数 op. 当函数完成的时候，它发出信号说明不再需要 "借" 的资源
   // 于是 资源被关闭在 finally 中,以确定被关闭
@@ -114,7 +115,7 @@ object FileMatcher {
   // 让客户代码看上去更像内建控制结构的一种方式是 使用花括号代替小括号包围参数列表。Scala 的任何方法调用，如果只传入一个参数，就能可选地使用花括号代替小括号包围参数
   // 其目的是让客户程序员能写出包围在花括号内的函数字面量
   val g = "hello world"
-  println(g.substring(7,9))
+  println(g.substring(7, 9))
 
   def withPrintWriter2(file: File)(op: PrintWriter => Unit) {
     val writer = new PrintWriter(file)
@@ -124,12 +125,30 @@ object FileMatcher {
       writer.close()
     }
   }
+
   val testFile = new File("data.txt")
-  withPrintWriter2(testFile){
+  withPrintWriter2(testFile) {
     writer => writer.println(new Date())
   }
 
   // 传名参数
+  var assertionEnabled = true
+
+  // 这个定义是正确的，但使用起来有点难看
+  def myAssert(predicate: () => Boolean) =
+    if (assertionEnabled && !predicate())
+      throw new AssertionError
+
+  // 其中不能缺少 () =>
+  myAssert(() => 5 > 3)
+
+  // 传名函数可以解决这个问题。要实现一个 传名函数,要定义参数的类型开始于 => 而不是 () =>
+  def byNameAssert(predicate: => Boolean) =
+    if (assertionEnabled && !predicate)
+      throw new AssertionError
+
+  byNameAssert(5 > 3)
+
 
 
 }
