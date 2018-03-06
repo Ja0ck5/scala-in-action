@@ -5,6 +5,25 @@ package com.ja0ck5.programming.oop.combine
   */
 abstract class Element2 {
 
+  /*final */def demo(): Unit ={
+    println("Element's implementation invoked")
+  }
 
 
 }
+
+class ArrayElement extends Element2{
+  override def demo(): Unit = {
+    println("ArrayElement 's implementation invoked")
+  }
+}
+
+class LineElement extends Element2{
+  override def demo(): Unit = {
+    println("LineElement's implementation invoked")
+  }
+}
+
+class  UniformElement extends Element2
+
+
