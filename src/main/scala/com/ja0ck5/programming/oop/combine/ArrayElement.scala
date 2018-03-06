@@ -56,4 +56,7 @@ class LineElement(s: String) extends ArrayElement(Array(s)) {
   override def height: Int = 1
 }
 
+// 变量和表达式上的方法调用是 动态绑定(dynamically bound)的. 这意味着被调用的实际方法实现取决于运行期对象基于的类，而不是变量或表达式的类型
+
+
 
