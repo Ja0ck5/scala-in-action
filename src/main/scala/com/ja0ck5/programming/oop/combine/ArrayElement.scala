@@ -26,6 +26,25 @@ package com.ja0ck5.programming.oop.combine
 class ArrayElement(conts: Array[String]) extends Element {
   //  override def contents: Array[String] = conts
   val contents: Array[String] = conts
+
+  def above(that: Element): Element = {
+    new ArrayElement(this.contents ++ that.contents) // ++ 连接两个数组
+  }
+  // 指令式
+  //  def beside(that: Element): Element = {
+  //    val contents = new Array[String](this.contents.length)
+  //    for (i <- 0 until this.contents.length)
+  //      contents(i) = this.contents(i) + that.contents(i)
+  //    new ArrayElement(contents)
+  //  }
+  
+  def beside(that: Element): Element = {
+    new ArrayElement(
+      for (
+        (line1, line2) <- this.contents zip that.contents
+      ) yield line1 + line2
+    )
+  }
 }
 
 class Cat {
@@ -48,6 +67,7 @@ class Tiger2(param1: Boolean,
   * 1. 若所有重写了父类具体成员的子类成员必须带有 override
   * 2. 若成员实现的是同名的抽象成员时,则 override 是可选的
   * 3. 若成员并未重写或实现其他基类里的成员则禁用 override 修饰符
+  *
   * @param s
   */
 class LineElement(s: String) extends ArrayElement(Array(s)) {

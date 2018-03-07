@@ -9,7 +9,6 @@ abstract class Element2 {
     println("Element's implementation invoked")
   }
 
-
 }
 
 class ArrayElement extends Element2{
@@ -25,5 +24,6 @@ class LineElement extends Element2{
 }
 
 class  UniformElement extends Element2
+
 
 
